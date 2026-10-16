@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A2762">
+<meta name="robots" content="noindex, nofollow">
+<title>Khách hàng của bạn đang ở hạng nào</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --orange:#F35700;--orange-2:#F76F08;--yellow:#FFB628;--blue:#0A2762;
+  --ink-2:#44526F;--line:#DCE2EF;
+  --grad-warm:linear-gradient(150deg,#F76F08,#FFB628);
+  --grad-navy:linear-gradient(150deg,#21243D,#144FA5);
+  --font:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100dvh;font-family:var(--font);color:var(--blue);background:#fff;line-height:1.4}
+.bg{position:fixed;inset:0;z-index:-1;background:
+  radial-gradient(60vmax 40vmax at 0% 0%,rgba(255,182,40,.22),transparent 60%),
+  radial-gradient(50vmax 40vmax at 100% 100%,rgba(243,87,0,.12),transparent 60%),#fff}
+.wrap{max-width:760px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) clamp(16px,4vw,48px) calc(24px + env(safe-area-inset-bottom))}
+h1{margin:0;text-wrap:balance;font-size:clamp(2rem,4.4vw,3rem);font-weight:300;line-height:1.15;letter-spacing:-.015em}
+h1 b{font-weight:600;background:var(--grad-warm);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;padding-bottom:.12em}
+.lead{margin:12px 0 0;font-size:clamp(1rem,1.6vw,1.2rem);color:var(--ink-2)}
+
+.seg-switch{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:999px;background:rgba(10,39,98,.08);max-width:520px}
+.seg-switch button{appearance:none;border:0;cursor:pointer;min-height:48px;padding:10px 12px;border-radius:999px;background:transparent;color:var(--blue);font:600 clamp(.9rem,2.8vw,1.05rem)/1.2 var(--font);transition:background-color .2s}
+.seg-switch button[aria-pressed="true"]{background:var(--grad-warm);cursor:default}
+button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+
+.grid{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr);gap:20px;align-items:stretch}
+
+.panel{padding:clamp(18px,3vw,32px);border-radius:24px;background:rgba(255,255,255,.85);border:1.5px solid var(--line);box-shadow:0 18px 40px -24px rgba(10,39,98,.35);display:flex;flex-direction:column;gap:clamp(18px,2.4vw,28px)}
+.inp .top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px}
+.inp label{font-size:.95rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.inp .nv{display:flex;align-items:center;gap:8px;color:var(--ink-2);font-size:.95rem}
+.num{width:7.5rem;min-height:48px;padding:6px 12px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--blue);font:600 1.35rem/1.2 var(--font);text-align:right;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.num::-webkit-outer-spin-button,.num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.inp .rng{margin-top:14px}
+input[type=range]{display:block;width:100%;height:14px;margin:0;border-radius:99px;-webkit-appearance:none;appearance:none;cursor:pointer;touch-action:pan-y;
+  background:linear-gradient(90deg,var(--orange-2) 0,var(--yellow) var(--p,50%),rgba(10,39,98,.12) var(--p,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:36px;height:36px;border-radius:50%;background:#fff;border:6px solid var(--orange);box-shadow:0 8px 18px -6px rgba(243,87,0,.6)}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;border:6px solid var(--orange)}
+.ticks{display:flex;justify-content:space-between;margin-top:8px;font-size:.85rem;color:var(--ink-2)}
+.notes{display:flex;flex-direction:column;gap:6px;margin-top:auto}
+.notes p{margin:0;font-size:.95rem;color:var(--ink-2)}
+.notes .warm{font-size:1rem;font-weight:700;color:var(--orange)}
+
+/* Ô kết quả: chỉ hiển thị hạng */
+.res{container-type:inline-size;overflow:hidden;padding:clamp(20px,4vw,32px);border-radius:24px;background:var(--grad-navy);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:4px}
+.res .lbl{font-size:clamp(.95rem,2.6vw,1.2rem);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#D9E2F5}
+.res .rank{margin:0;max-width:100%;font-size:clamp(2.25rem,11vw,4rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;color:var(--yellow);overflow-wrap:anywhere}
+@supports (width:1cqw){.res .rank{font-size:clamp(2.25rem,13cqw,4rem)}}
+footer{margin-top:20px;font-size:.85rem;color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<div class="wrap">
+  <main>
+    <h1>Khách hàng của bạn đang ở <b>hạng</b> nào</h1>
+    <p class="lead">Nhập hoặc kéo thanh công cụ để xem kết quả xếp hạng</p>
+
+    <div class="seg-switch" role="group" aria-label="Khu vực khách hàng">
+      <button type="button" id="bHn" aria-pressed="true">KH khu vực HN/HCM</button>
+      <button type="button" id="bOther" aria-pressed="false">KH khu vực còn lại</button>
+    </div>
+
+    <div class="grid">
+      <section class="panel" aria-label="Nhập tiêu chí">
+        <div class="inp">
+          <div class="top"><label for="n-gtgd">GTGD bình quân tháng</label><div class="nv"><input class="num" id="n-gtgd" type="number" inputmode="decimal" data-k="gtgd" min="0" max="60" step="0.01" value="4"><span>tỷ đồng</span></div></div>
+          <input class="rng" type="range" data-k="gtgd" min="0" max="60" step="0.01" value="4" aria-label="GTGD bình quân tháng, tỷ đồng">
+          <div class="ticks"><span>0</span><span>60 tỷ</span></div>
+        </div>
+        <div class="inp">
+          <div class="top"><label for="n-nav">NAV bình quân ngày</label><div class="nv"><input class="num" id="n-nav" type="number" inputmode="decimal" data-k="nav" min="0" max="30" step="0.01" value="2"><span>tỷ đồng</span></div></div>
+          <input class="rng" type="range" data-k="nav" min="0" max="30" step="0.01" value="2" aria-label="NAV bình quân ngày, tỷ đồng">
+          <div class="ticks"><span>0</span><span>30 tỷ</span></div>
+        </div>
+        <div class="inp">
+          <div class="top"><label for="n-dn">Dư nợ bình quân ngày</label><div class="nv"><input class="num" id="n-dn" type="number" inputmode="decimal" data-k="dn" min="0" max="15" step="0.01" value="0.2"><span>tỷ đồng</span></div></div>
+          <input class="rng" type="range" data-k="dn" min="0" max="15" step="0.01" value="0.2" aria-label="Dư nợ bình quân ngày, tỷ đồng">
+          <div class="ticks"><span>0</span><span>15 tỷ</span></div>
+        </div>
+        <div class="notes">
+          <p>Mỗi bước kéo = 10 triệu đồng</p>
+          <p class="warm">Thời gian lấy dữ liệu tối thiểu 1 tháng</p>
+        </div>
+      </section>
+
+      <section class="res" aria-label="Kết quả xếp hạng" aria-live="polite">
+        <div class="lbl">Hạng khách hàng</div>
+        <p class="rank o-rank">Gold</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>Số liệu nhập chỉ mang tính minh họa</footer>
+</div>
+
+<script>
+(function(){
+  var TH={hn:[15,65,200],other:[10.5,45.5,140]};
+  var NAMES=['Silver','Gold','Diamond','Platinum'];
+  var S={gtgd:4,nav:2,dn:0.2}, region='hn';
+  var $=function(s){return document.querySelector(s)};
+  var all=function(s){return [].slice.call(document.querySelectorAll(s))};
+
+  function render(){
+    var th=TH[region];
+    var total=S.gtgd*10*.5 + S.nav*100*.15 + S.dn*100*.35;
+    var idx=total<th[0]?0:total<th[1]?1:total<th[2]?2:3;
+    $('.o-rank').textContent=NAMES[idx];
+    all('.rng').forEach(function(r){r.style.setProperty('--p',(S[r.dataset.k]/(+r.max)*100)+'%')});
+    $('#bHn').setAttribute('aria-pressed',region==='hn');
+    $('#bOther').setAttribute('aria-pressed',region!=='hn');
+  }
+  function sync(skip){
+    all('.rng,.num').forEach(function(el){
+      if(el!==skip && document.activeElement!==el) el.value=S[el.dataset.k];
+    });
+  }
+  document.addEventListener('input',function(e){
+    var el=e.target; if(!el.dataset||!el.dataset.k) return;
+    var v=parseFloat(String(el.value).replace(',','.')); if(isNaN(v)) v=0;
+    v=Math.max(0,Math.min(+el.max,v));
+    S[el.dataset.k]=Math.round(v*100)/100;
+    sync(el); render();
+  });
+  document.addEventListener('change',function(e){
+    var el=e.target;
+    if(el.classList&&el.classList.contains('num')) el.value=S[el.dataset.k];
+  });
+  $('#bHn').addEventListener('click',function(){region='hn';render()});
+  $('#bOther').addEventListener('click',function(){region='other';render()});
+  sync(null); render();
+})();
+</script>
+</body>
+</html>
